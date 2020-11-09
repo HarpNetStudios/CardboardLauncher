@@ -1,0 +1,43 @@
+name: CD
+
+on:
+  push:
+    tags:
+      - 'v*' # versioned tags
+ 
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+    - name: Restore packages
+      run: nuget restore CardboardLauncher.sln
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+    - name: Build with MSBuild
+      run: msbuild CardboardLauncher.sln -p:Configuration=Release
+    - name: Archive Windows binaries
+      working-directory: ./bin/Release
+      run: Compress-Archive -Path .\launcher.exe, .\launcher.json, .\Newtonsoft.Json.dll -DestinationPath CardboardLauncher.zip
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+    - name: Upload Windows binaries
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./CardboardLauncher.zip
+        asset_name: CardboardLauncher.zip
+        asset_content_type: application/zip
