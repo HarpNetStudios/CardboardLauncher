@@ -22,8 +22,8 @@ jobs:
     - name: Archive Windows binaries
       working-directory: ./bin/Release
       run: |
-      Copy-Item "..\..\launcher.json" -Destination "."
-      Compress-Archive -Path .\CardboardLauncher.exe, .\launcher.json, .\Newtonsoft.Json.dll -DestinationPath CardboardLauncher.zip
+        Copy-Item "..\..\launcher.json" -Destination "."
+        Compress-Archive -Path .\CardboardLauncher.exe, .\launcher.json, .\Newtonsoft.Json.dll -DestinationPath CardboardLauncher.zip
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
