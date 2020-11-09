@@ -21,7 +21,7 @@ jobs:
       run: msbuild CardboardLauncher.sln -p:Configuration=Release
     - name: Archive Windows binaries
       working-directory: ./bin/Release
-      run: Compress-Archive -Path .\launcher.exe, .\launcher.json, .\Newtonsoft.Json.dll -DestinationPath CardboardLauncher.zip
+      run: Compress-Archive -Path .\CardboardLauncher.exe, .\launcher.json, .\Newtonsoft.Json.dll -DestinationPath CardboardLauncher.zip
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
