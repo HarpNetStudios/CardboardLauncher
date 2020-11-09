@@ -21,7 +21,9 @@ jobs:
       run: msbuild CardboardLauncher.sln -p:Configuration=Release
     - name: Archive Windows binaries
       working-directory: ./bin/Release
-      run: Compress-Archive -Path .\CardboardLauncher.exe, .\launcher.json, .\Newtonsoft.Json.dll -DestinationPath CardboardLauncher.zip
+      run: |
+      Copy-Item "..\..\launcher.json" -Destination "."
+      Compress-Archive -Path .\CardboardLauncher.exe, .\launcher.json, .\Newtonsoft.Json.dll -DestinationPath CardboardLauncher.zip
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -38,6 +40,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./CardboardLauncher.zip
+        asset_path: ./bin/Release/CardboardLauncher.zip
         asset_name: CardboardLauncher.zip
         asset_content_type: application/zip
