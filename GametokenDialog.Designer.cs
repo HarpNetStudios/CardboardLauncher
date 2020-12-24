@@ -75,15 +75,16 @@
             // 
             // launcherTitle
             // 
+            this.launcherTitle.AutoEllipsis = true;
             this.launcherTitle.BackColor = System.Drawing.Color.Transparent;
-            this.launcherTitle.Font = new System.Drawing.Font("Segoe UI", 10.25F);
+            this.launcherTitle.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.launcherTitle.ForeColor = System.Drawing.Color.White;
             this.launcherTitle.Location = new System.Drawing.Point(0, 0);
             this.launcherTitle.Name = "launcherTitle";
             this.launcherTitle.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
-            this.launcherTitle.Size = new System.Drawing.Size(164, 26);
+            this.launcherTitle.Size = new System.Drawing.Size(426, 26);
             this.launcherTitle.TabIndex = 1;
-            this.launcherTitle.Text = "Cardboard Launcher";
+            this.launcherTitle.Text = "{GAMETITLE} Launcher";
             this.launcherTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.launcherTitle.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Title_MouseDown);
             this.launcherTitle.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Title_MouseMove);
@@ -131,6 +132,7 @@
             this.MinimizeBox = false;
             this.Name = "GametokenDialog";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Cardboard Launcher";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GametokenDialog_FormClosing);
             this.Load += new System.EventHandler(this.GametokenDialog_Load);

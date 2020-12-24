@@ -13,18 +13,13 @@ namespace CardboardLauncher
     [System.Runtime.InteropServices.ComVisibleAttribute(true)]
     public partial class mainForm : Form
     {
-
-        public const int launcherVersion = 3;
-
-        private int gameId = 1; // Carmine Impact
-
         private bool drag = false; // determine if we should be moving the form
         private Point startPoint = new Point(0, 0); // also for the moving
 
+        private bool technicalIssues = false; // Are the servers down?
+
         private bool success;
         private int pageSelected;
-
-        private static string gameName = "Carmine Impact";
 
         private bool use64bit;
 
@@ -32,7 +27,7 @@ namespace CardboardLauncher
 
         private void DisplayMessage(string text, string origin = null, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
         {
-            MessageBox.Show(text, "Cardboard Launcher" + (origin != null ? " - "+origin : ""), buttons, icon);
+            MessageBox.Show(text, LauncherInfo.gameName+" Launcher" + (origin != null ? " - "+origin : ""), buttons, icon);
         }
 
         private void LoadConfig()
@@ -72,12 +67,35 @@ namespace CardboardLauncher
             }
         }
 
-        private bool GrabInfo(string token)
+        private void CheckVersion()
         {
-            if(token=="")return false;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://harpnetstudios.com/hnid/api/v1/game/auth/login?id=" + gameId);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://harpnetstudios.com/hnid/launcher/version?id=" + LauncherInfo.gameId);
+                request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+                if (typeof(Program).Assembly.GetName().Version.ToString() != content)
+                {
+                    DisplayMessage(string.Format("Looks like your launcher is out of date!\n\nNew version available: %s\nYour version: %s", content, typeof(Program).Assembly.GetName().Version.ToString()), "Launcher Update");
+                }
+            }
+            catch(WebException)
+            {
+                technicalIssues = true;
+                webLauncher.Visible = false;
+                playOfflineChkBox.Checked = true;
+            }
+        }
+
+        private bool GrabInfo(string token)
+        {
+            if (token=="" || technicalIssues) return false;
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://harpnetstudios.com/hnid/api/v1/game/auth/login?id=" + LauncherInfo.gameId);
+                request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
                 WebHeaderCollection whc = request.Headers;
                 whc.Add("X-Game-Token: "+token);
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -85,7 +103,10 @@ namespace CardboardLauncher
                 UserInfo info = JsonConvert.DeserializeObject<UserInfo>(content);
                 Console.WriteLine(content);
 
-                success = info.status == 0;
+                HttpStatusCode resCode = response.StatusCode;
+
+                success = resCode == HttpStatusCode.OK && info.status == 0;
+                DisplayMessage(success.ToString());
 
                 if(success)
                 {
@@ -136,8 +157,13 @@ namespace CardboardLauncher
             InitializeComponent();
 
             webWarn.Location = new Point(206, 34);
+            advSettings.Location = new Point(206, 34);
 
             advSettings.Visible = false;
+
+            webLauncher.Location = new Point(3, 3);
+            webLauncher.BringToFront();
+            
 
             webLauncher.Document.BackColor = this.BackColor;
             #if DEBUG
@@ -147,6 +173,7 @@ namespace CardboardLauncher
             #endif
 
             LoadConfig();
+            CheckVersion();
             GrabInfo(config.gameToken);
             if(config.homeDir == "") config.homeDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Project Crimson Alpha");
             homeDirBox.Text = config.homeDir;
@@ -156,9 +183,9 @@ namespace CardboardLauncher
 
             webLauncher.ObjectForScripting = this;
             webLauncher.Url = new Uri(config.webUrl);
-            this.Text = gameName + " Launcher";
-            launcherTitle.Text = gameName + " Launcher";
-            playButton.Text = "Play " + gameName;
+            this.Text = LauncherInfo.gameName + " Launcher";
+            launcherTitle.Text = LauncherInfo.gameName + " Launcher";
+            playButton.Text = "&Play " + LauncherInfo.gameName;
             versionLabel.Text = "Launcher Version " + typeof(Program).Assembly.GetName().Version;
         }
 
@@ -185,7 +212,7 @@ namespace CardboardLauncher
             {
                 playOfflineChkBox.Enabled = true;
             }
-            DisplayMessage("Error setting game token", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            DisplayMessage("Error setting game token.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         public bool isTokenSet()
@@ -235,8 +262,11 @@ namespace CardboardLauncher
             if(playOfflineChkBox.Checked)
             {
                 launchToken = "OFFLINE";
-                DialogResult offlineMessage = MessageBox.Show("Hey, you are about to start the game in OFFLINE mode!\n\nTo experience all that the game has to offer, including multiplayer, please log into your HNID account.\n\nAre you sure you want to continue?", "Offline Mode Warning", MessageBoxButtons.YesNo);
-                if(offlineMessage == DialogResult.No) return;
+                if(!technicalIssues)
+                {
+                    DialogResult offlineMessage = MessageBox.Show("Hey, you are about to start the game in OFFLINE mode!\n\nTo experience all that the game has to offer, including multiplayer, please log into your HNID account.\n\nAre you sure you want to continue?", "Offline Mode Warning", MessageBoxButtons.YesNo);
+                    if (offlineMessage == DialogResult.No) return;
+                }
             }
             
             // Create new process definition
@@ -264,7 +294,7 @@ namespace CardboardLauncher
 
         private void versionLabel_DoubleClick(object sender, EventArgs e)
         {
-            MessageBox.Show("Created by Yellowberry.\nSpecial thanks to the HN crew!", "Cardboard Launcher");
+            DisplayMessage("Created by Yellowberry.\nSpecial thanks to the HN crew!");
         }
 
         private void mainForm_Load(object sender, EventArgs e)
@@ -274,6 +304,7 @@ namespace CardboardLauncher
 
         private void webLauncher_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
+            webLauncher.Document.BackColor = this.BackColor;
             if(e.Url.ToString() == "about:blank") { return; }
 
             string extForce = "#_force";

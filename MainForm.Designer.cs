@@ -54,6 +54,8 @@
             this.advSettings = new System.Windows.Forms.Panel();
             this.playOfflineChkBox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.archGroup.SuspendLayout();
             this.homeDirGroup.SuspendLayout();
             this.webWarn.SuspendLayout();
@@ -69,7 +71,7 @@
             this.archGroup.Controls.Add(this.archRadio64);
             this.archGroup.Controls.Add(this.archRadio32);
             this.archGroup.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.archGroup.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.archGroup.ForeColor = System.Drawing.SystemColors.Control;
             this.archGroup.Location = new System.Drawing.Point(9, 3);
             this.archGroup.Name = "archGroup";
             this.archGroup.Size = new System.Drawing.Size(184, 42);
@@ -109,19 +111,19 @@
             this.playButton.FlatAppearance.BorderSize = 0;
             this.playButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.playButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.playButton.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.playButton.ForeColor = System.Drawing.SystemColors.Control;
             this.playButton.Location = new System.Drawing.Point(-1, 26);
             this.playButton.Name = "playButton";
             this.playButton.Size = new System.Drawing.Size(184, 50);
             this.playButton.TabIndex = 1;
-            this.playButton.Text = "Play {GAMETITLE}";
+            this.playButton.Text = "&Play {GAMETITLE}";
             this.playButton.UseVisualStyleBackColor = false;
             this.playButton.Click += new System.EventHandler(this.playButton_Click);
             // 
             // webLauncher
             // 
             this.webLauncher.AllowWebBrowserDrop = false;
-            this.webLauncher.Location = new System.Drawing.Point(3, 3);
+            this.webLauncher.Location = new System.Drawing.Point(533, 326);
             this.webLauncher.MinimumSize = new System.Drawing.Size(20, 20);
             this.webLauncher.Name = "webLauncher";
             this.webLauncher.ScrollBarsEnabled = false;
@@ -140,7 +142,7 @@
             this.homeDirGroup.Controls.Add(this.homeDirBtn);
             this.homeDirGroup.Controls.Add(this.homeDirBox);
             this.homeDirGroup.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.homeDirGroup.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.homeDirGroup.ForeColor = System.Drawing.SystemColors.Control;
             this.homeDirGroup.Location = new System.Drawing.Point(9, 51);
             this.homeDirGroup.Name = "homeDirGroup";
             this.homeDirGroup.Size = new System.Drawing.Size(184, 45);
@@ -177,18 +179,20 @@
             this.versionLabel.AutoSize = true;
             this.versionLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.versionLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
-            this.versionLabel.Location = new System.Drawing.Point(9, 345);
+            this.versionLabel.Location = new System.Drawing.Point(12, 344);
             this.versionLabel.Name = "versionLabel";
-            this.versionLabel.Size = new System.Drawing.Size(122, 13);
+            this.versionLabel.Size = new System.Drawing.Size(131, 13);
             this.versionLabel.TabIndex = 3;
-            this.versionLabel.Text = "Launcher Version 1.2.1";
+            this.versionLabel.Text = "Launcher Version 0.0.0.0";
             this.versionLabel.DoubleClick += new System.EventHandler(this.versionLabel_DoubleClick);
             // 
             // webWarn
             // 
-            this.webWarn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.webWarn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(18)))));
+            this.webWarn.Controls.Add(this.label2);
+            this.webWarn.Controls.Add(this.label1);
             this.webWarn.Controls.Add(this.webLauncher);
-            this.webWarn.Location = new System.Drawing.Point(793, 124);
+            this.webWarn.Location = new System.Drawing.Point(206, 34);
             this.webWarn.Name = "webWarn";
             this.webWarn.Size = new System.Drawing.Size(596, 416);
             this.webWarn.TabIndex = 4;
@@ -198,7 +202,7 @@
             this.groupBox1.Controls.Add(this.userAuthLabel);
             this.groupBox1.Controls.Add(this.gameTokenBtn);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBox1.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.groupBox1.ForeColor = System.Drawing.SystemColors.Control;
             this.groupBox1.Location = new System.Drawing.Point(12, 64);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(184, 62);
@@ -228,7 +232,7 @@
             this.gameTokenBtn.Name = "gameTokenBtn";
             this.gameTokenBtn.Size = new System.Drawing.Size(172, 24);
             this.gameTokenBtn.TabIndex = 1;
-            this.gameTokenBtn.Text = "Change Game Token";
+            this.gameTokenBtn.Text = "Change Game &Token";
             this.gameTokenBtn.UseVisualStyleBackColor = false;
             this.gameTokenBtn.Click += new System.EventHandler(this.gameTokenBtn_Click);
             // 
@@ -243,7 +247,7 @@
             this.saveConfigChkBox.Name = "saveConfigChkBox";
             this.saveConfigChkBox.Size = new System.Drawing.Size(87, 17);
             this.saveConfigChkBox.TabIndex = 5;
-            this.saveConfigChkBox.Text = "Save Config";
+            this.saveConfigChkBox.Text = "&Save Config";
             this.saveConfigChkBox.UseVisualStyleBackColor = true;
             this.saveConfigChkBox.CheckedChanged += new System.EventHandler(this.saveConfigChkBox_CheckedChanged);
             // 
@@ -251,12 +255,12 @@
             // 
             this.qConnectChkBox.AutoSize = true;
             this.qConnectChkBox.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.qConnectChkBox.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.qConnectChkBox.ForeColor = System.Drawing.SystemColors.Control;
             this.qConnectChkBox.Location = new System.Drawing.Point(97, 183);
             this.qConnectChkBox.Name = "qConnectChkBox";
             this.qConnectChkBox.Size = new System.Drawing.Size(101, 17);
             this.qConnectChkBox.TabIndex = 6;
-            this.qConnectChkBox.Text = "Quick Connect";
+            this.qConnectChkBox.Text = "&Quick Connect";
             this.qConnectChkBox.UseVisualStyleBackColor = true;
             this.qConnectChkBox.CheckedChanged += new System.EventHandler(this.qConnectChkBox_CheckedChanged);
             // 
@@ -264,7 +268,7 @@
             // 
             this.groupBox2.Controls.Add(this.qConnectServBox);
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.groupBox2.ForeColor = System.Drawing.SystemColors.HighlightText;
+            this.groupBox2.ForeColor = System.Drawing.SystemColors.Control;
             this.groupBox2.Location = new System.Drawing.Point(12, 132);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(184, 45);
@@ -312,10 +316,11 @@
             // 
             // launcherTitle
             // 
+            this.launcherTitle.AutoEllipsis = true;
             this.launcherTitle.BackColor = System.Drawing.Color.Transparent;
             this.launcherTitle.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.launcherTitle.ForeColor = System.Drawing.Color.White;
-            this.launcherTitle.Location = new System.Drawing.Point(0, -2);
+            this.launcherTitle.Location = new System.Drawing.Point(0, 0);
             this.launcherTitle.Name = "launcherTitle";
             this.launcherTitle.Padding = new System.Windows.Forms.Padding(6, 0, 0, 0);
             this.launcherTitle.Size = new System.Drawing.Size(748, 26);
@@ -330,6 +335,7 @@
             // 
             this.closeBtn.BackgroundImage = global::CardboardLauncher.Properties.Resources.close;
             this.closeBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.closeBtn.Cursor = System.Windows.Forms.Cursors.Hand;
             this.closeBtn.Location = new System.Drawing.Point(757, 0);
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(52, 26);
@@ -342,7 +348,7 @@
             // 
             this.advSettings.Controls.Add(this.archGroup);
             this.advSettings.Controls.Add(this.homeDirGroup);
-            this.advSettings.Location = new System.Drawing.Point(206, 34);
+            this.advSettings.Location = new System.Drawing.Point(243, 431);
             this.advSettings.Name = "advSettings";
             this.advSettings.Size = new System.Drawing.Size(596, 416);
             this.advSettings.TabIndex = 9;
@@ -356,25 +362,50 @@
             this.playOfflineChkBox.Name = "playOfflineChkBox";
             this.playOfflineChkBox.Size = new System.Drawing.Size(95, 17);
             this.playOfflineChkBox.TabIndex = 10;
-            this.playOfflineChkBox.Text = "Play OFFLINE";
+            this.playOfflineChkBox.Text = "Play &OFFLINE";
             this.playOfflineChkBox.UseVisualStyleBackColor = true;
             this.playOfflineChkBox.CheckedChanged += new System.EventHandler(this.playOfflineChkBox_CheckedChanged);
             // 
             // panel1
             // 
-            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel1.Controls.Add(this.playButton);
             this.panel1.Controls.Add(this.playOfflineChkBox);
+            this.panel1.ForeColor = System.Drawing.SystemColors.Control;
             this.panel1.Location = new System.Drawing.Point(12, 372);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(184, 78);
             this.panel1.TabIndex = 11;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
+            this.label1.Location = new System.Drawing.Point(191, 40);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(214, 86);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Oops!";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(8, 166);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(580, 84);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Looks like our servers are having some issues!\r\nDon\'t worry, you can still play i" +
+    "n offline mode until the issues are resolved!\r\n\r\nSorry about that, we\'ll get eve" +
+    "rything working as soon as we can!";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(18)))));
             this.ClientSize = new System.Drawing.Size(809, 457);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.advSettings);
@@ -399,6 +430,7 @@
             this.homeDirGroup.ResumeLayout(false);
             this.homeDirGroup.PerformLayout();
             this.webWarn.ResumeLayout(false);
+            this.webWarn.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -439,6 +471,8 @@
         private System.Windows.Forms.Panel advSettings;
         private System.Windows.Forms.CheckBox playOfflineChkBox;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
 

@@ -14,6 +14,8 @@ namespace CardboardLauncher
         public GametokenDialog()
         {
             InitializeComponent();
+            this.Text = LauncherInfo.gameName + " Launcher";
+            launcherTitle.Text = LauncherInfo.gameName + " Launcher";
         }
 
         private void GametokenDialog_FormClosing(object sender, FormClosingEventArgs e)
