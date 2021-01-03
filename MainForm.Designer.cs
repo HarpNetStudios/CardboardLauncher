@@ -40,6 +40,8 @@
             this.homeDirBox = new System.Windows.Forms.TextBox();
             this.versionLabel = new System.Windows.Forms.Label();
             this.webWarn = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.userAuthLabel = new System.Windows.Forms.Label();
             this.gameTokenBtn = new System.Windows.Forms.Button();
@@ -54,8 +56,6 @@
             this.advSettings = new System.Windows.Forms.Panel();
             this.playOfflineChkBox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.archGroup.SuspendLayout();
             this.homeDirGroup.SuspendLayout();
             this.webWarn.SuspendLayout();
@@ -197,6 +197,31 @@
             this.webWarn.Size = new System.Drawing.Size(596, 416);
             this.webWarn.TabIndex = 4;
             // 
+            // label2
+            // 
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(8, 166);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(580, 84);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "Looks like our servers are having some issues!\r\nDon\'t worry, you can still play i" +
+    "n offline mode until the issues are resolved!\r\n\r\nSorry about that, we\'ll get eve" +
+    "rything working as soon as we can!";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
+            this.label1.Location = new System.Drawing.Point(191, 40);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(214, 86);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Oops!";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.userAuthLabel);
@@ -216,9 +241,9 @@
             this.userAuthLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
             this.userAuthLabel.Location = new System.Drawing.Point(6, 16);
             this.userAuthLabel.Name = "userAuthLabel";
-            this.userAuthLabel.Size = new System.Drawing.Size(55, 13);
+            this.userAuthLabel.Size = new System.Drawing.Size(81, 13);
             this.userAuthLabel.TabIndex = 2;
-            this.userAuthLabel.Text = "User: N/A";
+            this.userAuthLabel.Text = "Not Logged In";
             // 
             // gameTokenBtn
             // 
@@ -375,31 +400,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(184, 78);
             this.panel1.TabIndex = 11;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
-            this.label1.Location = new System.Drawing.Point(191, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(214, 86);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Oops!";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(8, 166);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(580, 84);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Looks like our servers are having some issues!\r\nDon\'t worry, you can still play i" +
-    "n offline mode until the issues are resolved!\r\n\r\nSorry about that, we\'ll get eve" +
-    "rything working as soon as we can!";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // mainForm
             // 

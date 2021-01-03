@@ -25,9 +25,11 @@ namespace CardboardLauncher
 
         private Config config;
 
-        private void DisplayMessage(string text, string origin = null, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
+        private string migratePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Project Crimson Alpha");
+
+        private DialogResult DisplayMessage(string text, string origin = null, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
         {
-            MessageBox.Show(text, LauncherInfo.gameName+" Launcher" + (origin != null ? " - "+origin : ""), buttons, icon);
+            return MessageBox.Show(text, LauncherInfo.gameName+" Launcher" + (origin != null ? " - "+origin : ""), buttons, icon);
         }
 
         private void LoadConfig()
@@ -71,14 +73,16 @@ namespace CardboardLauncher
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://harpnetstudios.com/hnid/launcher/version?id=" + LauncherInfo.gameId);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(config.webUrl + "version?id=" + LauncherInfo.gameId);
                 request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
-                if (typeof(Program).Assembly.GetName().Version.ToString() != content)
+                var ver = typeof(Program).Assembly.GetName().Version;
+
+                if (new Version(content).CompareTo(ver) > 0) 
                 {
-                    DisplayMessage(string.Format("Looks like your launcher is out of date!\n\nNew version available: %s\nYour version: %s", content, typeof(Program).Assembly.GetName().Version.ToString()), "Launcher Update");
+                    DisplayMessage(string.Format("Looks like your launcher is out of date!\n\nNew version available: {0}\nYour version: {1}", content, ver.ToString()), "Launcher Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch(WebException)
@@ -106,7 +110,6 @@ namespace CardboardLauncher
                 HttpStatusCode resCode = response.StatusCode;
 
                 success = resCode == HttpStatusCode.OK && info.status == 0;
-                DisplayMessage(success.ToString());
 
                 if(success)
                 {
@@ -116,7 +119,7 @@ namespace CardboardLauncher
                 else
                 {
                     config.gameToken = "";
-                    userAuthLabel.Text = "User: N/A";
+                    userAuthLabel.Text = "Not Logged In";
                 }
                 playOfflineChkBox.Checked = !success;
                 playButton.Enabled = success || playOfflineChkBox.Checked;
@@ -175,7 +178,9 @@ namespace CardboardLauncher
             LoadConfig();
             CheckVersion();
             GrabInfo(config.gameToken);
-            if(config.homeDir == "") config.homeDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Project Crimson Alpha");
+            if(config.homeDir == "") config.homeDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Carmine Impact Alpha");
+            if(config.homeDir == migratePath && Directory.Exists(migratePath)) PromptMigration();
+            else if(Directory.Exists(migratePath)) PromptMigration();
             homeDirBox.Text = config.homeDir;
             qConnectServBox.Text = config.qConnectServ;
 
@@ -183,10 +188,28 @@ namespace CardboardLauncher
 
             webLauncher.ObjectForScripting = this;
             webLauncher.Url = new Uri(config.webUrl);
-            this.Text = LauncherInfo.gameName + " Launcher";
-            launcherTitle.Text = LauncherInfo.gameName + " Launcher";
+            this.Text = launcherTitle.Text = LauncherInfo.gameName + " Launcher";
             playButton.Text = "&Play " + LauncherInfo.gameName;
             versionLabel.Text = "Launcher Version " + typeof(Program).Assembly.GetName().Version;
+        }
+
+        public void PromptMigration()
+        {
+            var migrateMessage = DisplayMessage("We've detected you're upgrading from an older version. Would you like to migrate your user data folder?", "Migration Wizard", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (migrateMessage == DialogResult.No) return;
+            try
+            {
+                string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Carmine Impact Alpha");
+                Directory.Move(migratePath, folder);
+                config.homeDir = folder;
+                SaveConfig();
+                DisplayMessage("Successfully migrated user folder!", "Migration Wizard", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception e)
+            {
+                DisplayMessage(string.Format("Migration failed! Please report this in the Discord server.\n\nError details: {0}", e.Message), "Migration Wizard", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
         }
 
         public void displayMessage(String message)
@@ -205,7 +228,7 @@ namespace CardboardLauncher
             {
                 if(token.Length.Equals(64))
                 {
-                    if(!quiet) DisplayMessage("Successfully set game token!");
+                    if(!quiet) DisplayMessage("Successfully set game token!", null, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
                 }
             } else
@@ -264,7 +287,7 @@ namespace CardboardLauncher
                 launchToken = "OFFLINE";
                 if(!technicalIssues)
                 {
-                    DialogResult offlineMessage = MessageBox.Show("Hey, you are about to start the game in OFFLINE mode!\n\nTo experience all that the game has to offer, including multiplayer, please log into your HNID account.\n\nAre you sure you want to continue?", "Offline Mode Warning", MessageBoxButtons.YesNo);
+                    DialogResult offlineMessage = DisplayMessage("Hey, you are about to start the game in OFFLINE mode!\n\nTo experience all that the game has to offer, including multiplayer, please log into your HNID account.\n\nAre you sure you want to continue?", "Offline Mode Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (offlineMessage == DialogResult.No) return;
                 }
             }
@@ -272,7 +295,7 @@ namespace CardboardLauncher
             // Create new process definition
             ProcessStartInfo gameProcess = new ProcessStartInfo();
             gameProcess.FileName = Path.Combine("bin" + (use64bit ? "64" : ""), "cardboard_msvc.exe");
-            gameProcess.Arguments = "-q\"" + config.homeDir + "\" -glog.txt -c"+launchToken + (qConnectChkBox.Checked&&!playOfflineChkBox.Checked ? " -x\"connect "+config.qConnectServ+"\"" : "");
+            gameProcess.Arguments = "-c" + launchToken + " -q\"" + config.homeDir + "\" -glog.txt" + (qConnectChkBox.Checked&&!playOfflineChkBox.Checked ? " -x\"connect "+config.qConnectServ+"\"" : "");
             
             
             // Attempt to start process with correct arguments
