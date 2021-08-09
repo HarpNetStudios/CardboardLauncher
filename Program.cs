@@ -5,6 +5,7 @@ namespace CardboardLauncher
 {
     public static class LauncherInfo {
         public static readonly int gameId = 1; // Carmine Impact
+        public static readonly uint steamId = 1359640;
 
         public static readonly string gameName = "Carmine Impact";
     }

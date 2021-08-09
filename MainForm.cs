@@ -6,6 +6,7 @@ using System.Net;
 using System.Security.Permissions;
 using System.Windows.Forms;
 using Newtonsoft.Json;
+using Steamworks;
 
 namespace CardboardLauncher
 {
@@ -30,6 +31,40 @@ namespace CardboardLauncher
         private DialogResult DisplayMessage(string text, string origin = null, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
         {
             return MessageBox.Show(text, LauncherInfo.gameName+" Launcher" + (origin != null ? " - "+origin : ""), buttons, icon);
+        }
+
+        private void ValidateSteam()
+        {
+            if(technicalIssues) return;
+            try
+            {
+                SteamClient.Init(LauncherInfo.steamId, true);
+                if(!SteamClient.IsLoggedOn) return;
+                var ticket = SteamUser.GetAuthSessionTicket();
+
+                //Clipboard.SetText(BitConverter.ToString(ticket.Data).Replace("-", ""));
+
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://harpnetstudios.com/hnid/api/v1/game/auth/steam?ticket=" + BitConverter.ToString(ticket.Data).Replace("-", "") + "&id=" + LauncherInfo.gameId);
+                request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
+
+                SteamLoginInfo info = JsonConvert.DeserializeObject<SteamLoginInfo>(content);
+                Console.WriteLine(content);
+
+                if (!info.valid) return; // bogus steam info
+                else if (string.IsNullOrEmpty(info.gametoken)) return; // no token returned
+                else
+                {
+                    config.gameToken = info.gametoken;
+                }
+
+            }
+            catch (System.Exception e)
+            {
+                DisplayMessage("Steam login failed!\n\nException: " + e.Message);
+                return;
+            }
         }
 
         private void LoadConfig()
@@ -85,7 +120,7 @@ namespace CardboardLauncher
                     DisplayMessage(string.Format("Looks like your launcher is out of date!\n\nNew version available: {0}\nYour version: {1}", content, ver.ToString()), "Launcher Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            catch(WebException)
+            catch(WebException e)
             {
                 technicalIssues = true;
                 webLauncher.Visible = false;
@@ -155,8 +190,16 @@ namespace CardboardLauncher
             public string username { get; set; }
         }
 
+        public class SteamLoginInfo
+        {
+            public string gametoken;
+            public bool valid;
+        }
+
         public mainForm()
         {
+            string[] args = Environment.GetCommandLineArgs();
+
             InitializeComponent();
 
             webWarn.Location = new Point(206, 34);
@@ -177,6 +220,7 @@ namespace CardboardLauncher
 
             LoadConfig();
             CheckVersion();
+            if (args.Length > 1 && args[1] == "--steam") ValidateSteam();
             GrabInfo(config.gameToken);
             if(config.homeDir == "") config.homeDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Carmine Impact Alpha");
             if(config.homeDir == migratePath && Directory.Exists(migratePath)) PromptMigration();
@@ -317,7 +361,7 @@ namespace CardboardLauncher
 
         private void versionLabel_DoubleClick(object sender, EventArgs e)
         {
-            DisplayMessage("Created by Yellowberry.\nSpecial thanks to the HN crew!");
+            DisplayMessage("Created by Yellowberry.\n\nSpecial thanks to the rest of the HarpNet crew!");
         }
 
         private void mainForm_Load(object sender, EventArgs e)
