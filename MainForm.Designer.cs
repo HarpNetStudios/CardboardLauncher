@@ -130,7 +130,9 @@
             this.webLauncher.Size = new System.Drawing.Size(590, 410);
             this.webLauncher.TabIndex = 2;
             this.webLauncher.Url = new System.Uri("", System.UriKind.Relative);
+            this.webLauncher.Visible = false;
             this.webLauncher.WebBrowserShortcutsEnabled = false;
+            this.webLauncher.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webLauncher_Loaded);
             this.webLauncher.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webLauncher_Navigating);
             // 
             // homeDirBrowser

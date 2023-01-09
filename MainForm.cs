@@ -26,7 +26,10 @@ namespace CardboardLauncher
 
         private Config config;
 
+        private string api_url = @"https://harpnetstudios.com/hnid/api/";
+
         private string migratePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Project Crimson Alpha");
+        private string mapMigratePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Carmine Impact Alpha", "packages", "base");
 
         private DialogResult DisplayMessage(string text, string origin = null, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
         {
@@ -44,7 +47,7 @@ namespace CardboardLauncher
 
                 //Clipboard.SetText(BitConverter.ToString(ticket.Data).Replace("-", ""));
 
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://harpnetstudios.com/hnid/api/v1/game/auth/steam?ticket=" + BitConverter.ToString(ticket.Data).Replace("-", "") + "&id=" + LauncherInfo.gameId);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(api_url+@"steam/AuthSession?ticket=" + BitConverter.ToString(ticket.Data).Replace("-", "") + "&id=" + LauncherInfo.gameId);
                 request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
@@ -133,7 +136,7 @@ namespace CardboardLauncher
             if (token=="" || technicalIssues) return false;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(@"https://harpnetstudios.com/hnid/api/v1/game/auth/login?id=" + LauncherInfo.gameId);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(api_url+@"v1/game/login?game=" + LauncherInfo.gameId);
                 request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
                 WebHeaderCollection whc = request.Headers;
                 whc.Add("X-Game-Token: "+token);
@@ -225,6 +228,9 @@ namespace CardboardLauncher
             if(config.homeDir == "") config.homeDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Carmine Impact Alpha");
             if(config.homeDir == migratePath && Directory.Exists(migratePath)) PromptMigration();
             else if(Directory.Exists(migratePath)) PromptMigration();
+
+            if (Directory.Exists(mapMigratePath)) PromptMapMigration();
+
             homeDirBox.Text = config.homeDir;
             qConnectServBox.Text = config.qConnectServ;
 
@@ -253,8 +259,24 @@ namespace CardboardLauncher
             {
                 DisplayMessage(string.Format("Migration failed! Please report this in the Discord server.\n\nError details: {0}", e.Message), "Migration Wizard", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
         }
+
+        public void PromptMapMigration()
+        {
+            var migrateMessage = DisplayMessage("We've detected you're upgrading from an older version. Would you like to migrate your custom map folder?", "Migration Wizard", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (migrateMessage == DialogResult.No) return;
+            try
+            {
+                string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Carmine Impact Alpha", "packages", "maps");
+                Directory.Move(mapMigratePath, folder);
+                SaveConfig();
+                DisplayMessage("Successfully migrated custom map folder!", "Migration Wizard", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception e)
+            {
+                DisplayMessage(string.Format("Migration failed! Please report this in the Discord server.\n\nError details: {0}", e.Message), "Migration Wizard", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+         }
 
         public void displayMessage(String message)
         {
@@ -331,7 +353,7 @@ namespace CardboardLauncher
                 launchToken = "OFFLINE";
                 if(!technicalIssues)
                 {
-                    DialogResult offlineMessage = DisplayMessage("Hey, you are about to start the game in OFFLINE mode!\n\nTo experience all that the game has to offer, including multiplayer, please log into your HNID account.\n\nAre you sure you want to continue?", "Offline Mode Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    DialogResult offlineMessage = DisplayMessage("Hey, you are about to start the game in OFFLINE mode!\n\nTo experience all that the game has to offer, including multiplayer, "+(isTokenSet() ? "please disable offline mode." : "please log into your HNID account.")+"\n\nAre you sure you want to launch in offline mode?", "Offline Mode Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (offlineMessage == DialogResult.No) return;
                 }
             }
@@ -340,7 +362,7 @@ namespace CardboardLauncher
             ProcessStartInfo gameProcess = new ProcessStartInfo();
             gameProcess.FileName = Path.Combine("bin" + (use64bit ? "64" : ""), "cardboard_msvc.exe");
             gameProcess.Arguments = "-c" + launchToken + " -q\"" + config.homeDir + "\" -glog.txt" + (qConnectChkBox.Checked&&!playOfflineChkBox.Checked ? " -x\"connect "+config.qConnectServ+"\"" : "");
-            
+             
             
             // Attempt to start process with correct arguments
             try
@@ -372,6 +394,7 @@ namespace CardboardLauncher
         private void webLauncher_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             webLauncher.Document.BackColor = this.BackColor;
+            this.webLauncher.ScrollBarsEnabled = false;
             if(e.Url.ToString() == "about:blank") { return; }
 
             string extForce = "#_force";
@@ -498,6 +521,11 @@ namespace CardboardLauncher
             {
                 playButton.Enabled = false;
             }
+        }
+
+        private void webLauncher_Loaded(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            if (!webLauncher.Visible && !technicalIssues) webLauncher.Visible = true;
         }
     }
 }
