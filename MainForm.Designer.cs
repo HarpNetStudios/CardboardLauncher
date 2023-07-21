@@ -1,4 +1,6 @@
-﻿namespace CardboardLauncher
+﻿using Microsoft.Web.WebView2.Core;
+
+namespace CardboardLauncher
 {
     partial class mainForm
     {
@@ -33,15 +35,15 @@
             this.archRadio64 = new System.Windows.Forms.RadioButton();
             this.archRadio32 = new System.Windows.Forms.RadioButton();
             this.playButton = new System.Windows.Forms.Button();
-            this.webLauncher = new System.Windows.Forms.WebBrowser();
+            this.webLauncher = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.homeDirBrowser = new System.Windows.Forms.FolderBrowserDialog();
             this.homeDirGroup = new System.Windows.Forms.GroupBox();
             this.homeDirBtn = new System.Windows.Forms.Button();
             this.homeDirBox = new System.Windows.Forms.TextBox();
             this.versionLabel = new System.Windows.Forms.Label();
             this.webWarn = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.technicalBody = new System.Windows.Forms.Label();
+            this.technicalTitle = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.userAuthLabel = new System.Windows.Forms.Label();
             this.gameTokenBtn = new System.Windows.Forms.Button();
@@ -57,6 +59,7 @@
             this.playOfflineChkBox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.archGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.webLauncher)).BeginInit();
             this.homeDirGroup.SuspendLayout();
             this.webWarn.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -122,18 +125,17 @@
             // 
             // webLauncher
             // 
-            this.webLauncher.AllowWebBrowserDrop = false;
+            this.webLauncher.AllowExternalDrop = false;
+            this.webLauncher.CreationProperties = null;
+            this.webLauncher.DefaultBackgroundColor = this.BackColor;
             this.webLauncher.Location = new System.Drawing.Point(533, 326);
             this.webLauncher.MinimumSize = new System.Drawing.Size(20, 20);
             this.webLauncher.Name = "webLauncher";
-            this.webLauncher.ScrollBarsEnabled = false;
             this.webLauncher.Size = new System.Drawing.Size(590, 410);
             this.webLauncher.TabIndex = 2;
-            this.webLauncher.Url = new System.Uri("", System.UriKind.Relative);
-            this.webLauncher.Visible = false;
-            this.webLauncher.WebBrowserShortcutsEnabled = false;
-            this.webLauncher.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webLauncher_Loaded);
-            this.webLauncher.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webLauncher_Navigating);
+            this.webLauncher.ZoomFactor = 1D;
+            this.webLauncher.NavigationStarting += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs>(this.webLauncher_Navigating);
+            this.webLauncher.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.webLauncher_Loaded);
             // 
             // homeDirBrowser
             // 
@@ -191,38 +193,40 @@
             // webWarn
             // 
             this.webWarn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(18)))));
-            this.webWarn.Controls.Add(this.label2);
-            this.webWarn.Controls.Add(this.label1);
+            this.webWarn.Controls.Add(this.technicalBody);
+            this.webWarn.Controls.Add(this.technicalTitle);
             this.webWarn.Controls.Add(this.webLauncher);
             this.webWarn.Location = new System.Drawing.Point(206, 34);
             this.webWarn.Name = "webWarn";
             this.webWarn.Size = new System.Drawing.Size(596, 416);
             this.webWarn.TabIndex = 4;
             // 
-            // label2
+            // technicalBody
             // 
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(8, 166);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(580, 84);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "Looks like our servers are having some issues!\r\nDon\'t worry, you can still play i" +
+            this.technicalBody.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.technicalBody.ForeColor = System.Drawing.SystemColors.Control;
+            this.technicalBody.Location = new System.Drawing.Point(8, 166);
+            this.technicalBody.Name = "technicalBody";
+            this.technicalBody.Size = new System.Drawing.Size(580, 84);
+            this.technicalBody.TabIndex = 4;
+            this.technicalBody.Text = "Looks like our servers are having some issues!\r\nDon\'t worry, you can still play i" +
     "n offline mode until the issues are resolved!\r\n\r\nSorry about that, we\'ll get eve" +
     "rything working as soon as we can!";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.technicalBody.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.technicalBody.Visible = false;
             // 
-            // label1
+            // technicalTitle
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
-            this.label1.Location = new System.Drawing.Point(191, 40);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(214, 86);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Oops!";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.technicalTitle.AutoSize = true;
+            this.technicalTitle.Font = new System.Drawing.Font("Segoe UI", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.technicalTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
+            this.technicalTitle.Location = new System.Drawing.Point(191, 40);
+            this.technicalTitle.Name = "technicalTitle";
+            this.technicalTitle.Size = new System.Drawing.Size(214, 86);
+            this.technicalTitle.TabIndex = 3;
+            this.technicalTitle.Text = "Oops!";
+            this.technicalTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.technicalTitle.Visible = false;
             // 
             // groupBox1
             // 
@@ -429,6 +433,7 @@
             this.Load += new System.EventHandler(this.mainForm_Load);
             this.archGroup.ResumeLayout(false);
             this.archGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.webLauncher)).EndInit();
             this.homeDirGroup.ResumeLayout(false);
             this.homeDirGroup.PerformLayout();
             this.webWarn.ResumeLayout(false);
@@ -452,7 +457,7 @@
         private System.Windows.Forms.RadioButton archRadio32;
         private System.Windows.Forms.RadioButton archRadio64;
         private System.Windows.Forms.Button playButton;
-        private System.Windows.Forms.WebBrowser webLauncher;
+        private Microsoft.Web.WebView2.WinForms.WebView2 webLauncher;
         private System.Windows.Forms.FolderBrowserDialog homeDirBrowser;
         private System.Windows.Forms.GroupBox homeDirGroup;
         private System.Windows.Forms.TextBox homeDirBox;
@@ -473,8 +478,8 @@
         private System.Windows.Forms.Panel advSettings;
         private System.Windows.Forms.CheckBox playOfflineChkBox;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label technicalBody;
+        private System.Windows.Forms.Label technicalTitle;
     }
 }
 

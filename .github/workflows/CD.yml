@@ -23,7 +23,7 @@ jobs:
       working-directory: ./bin/Release
       run: |
         Copy-Item "..\..\launcher.json" -Destination "."
-        Compress-Archive -Path .\CardboardLauncher.exe, .\launcher.json, .\Newtonsoft.Json.dll -DestinationPath CardboardLauncher.zip
+        Compress-Archive -Path .\CardboardLauncher.exe, .\launcher.json, .\Newtonsoft.Json.dll, .\Facepunch.Steamworks.Win64.dll, .\Microsoft.Web.WebView2.Core.dll, .\Microsoft.Web.WebView2.WinForms.dll, .\runtimes -DestinationPath CardboardLauncher.zip
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1

@@ -5,6 +5,8 @@ using System.IO;
 using System.Net;
 using System.Security.Permissions;
 using System.Windows.Forms;
+using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.WinForms;
 using Newtonsoft.Json;
 using Steamworks;
 
@@ -26,6 +28,7 @@ namespace CardboardLauncher
 
         private Config config;
 
+        private string trusted_url = @"https://harpnetstudios.com";
         private string api_url = @"https://harpnetstudios.com/hnid/api/";
 
         private string migratePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Project Crimson Alpha");
@@ -123,10 +126,10 @@ namespace CardboardLauncher
                     DisplayMessage(string.Format("Looks like your launcher is out of date!\n\nNew version available: {0}\nYour version: {1}", content, ver.ToString()), "Launcher Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            catch(WebException e)
+            catch(WebException)
             {
-                technicalIssues = true;
-                webLauncher.Visible = false;
+                technicalIssues = technicalBody.Visible = technicalTitle.Visible = true;
+                //webLauncher.Visible = false;
                 playOfflineChkBox.Checked = true;
             }
         }
@@ -212,17 +215,13 @@ namespace CardboardLauncher
 
             webLauncher.Location = new Point(3, 3);
             webLauncher.BringToFront();
-            
 
-            webLauncher.Document.BackColor = this.BackColor;
-            #if DEBUG
-                webLauncher.ScriptErrorsSuppressed = false;
-            #else
-                webLauncher.ScriptErrorsSuppressed = true;
-            #endif
+
+            webLauncher.DefaultBackgroundColor = this.BackColor;
 
             LoadConfig();
             CheckVersion();
+
             if (args.Length > 1 && args[1] == "--steam") ValidateSteam();
             GrabInfo(config.gameToken);
             if(config.homeDir == "") config.homeDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Carmine Impact Alpha");
@@ -236,8 +235,6 @@ namespace CardboardLauncher
 
             pageSelectCombo.SelectedIndex = 0; // HNID
 
-            webLauncher.ObjectForScripting = this;
-            webLauncher.Url = new Uri(config.webUrl);
             this.Text = launcherTitle.Text = LauncherInfo.gameName + " Launcher";
             playButton.Text = "&Play " + LauncherInfo.gameName;
             versionLabel.Text = "Launcher Version " + typeof(Program).Assembly.GetName().Version;
@@ -281,11 +278,6 @@ namespace CardboardLauncher
         public void displayMessage(String message)
         {
             DisplayMessage(message, "Webpage");
-        }
-
-        public void setScroll(bool scroll)
-        {
-            this.webLauncher.ScrollBarsEnabled = scroll;
         }
         
         public void setGameToken(string token, bool quiet=true)
@@ -386,38 +378,65 @@ namespace CardboardLauncher
             DisplayMessage("Created by Yellowberry.\n\nSpecial thanks to the rest of the HarpNet crew!");
         }
 
-        private void mainForm_Load(object sender, EventArgs e)
+        private async void mainForm_Load(object sender, EventArgs e)
         {
-            webLauncher.ObjectForScripting = this;
+            webLauncher.DefaultBackgroundColor = this.BackColor;
+
+            await webLauncher.EnsureCoreWebView2Async();
+
+            webLauncher.CoreWebView2.AddWebResourceRequestedFilter($"*", CoreWebView2WebResourceContext.All);
+            
+            webLauncher.CoreWebView2.WebResourceRequested += webLauncher_AddLauncherHeader;
+            webLauncher.CoreWebView2.NewWindowRequested += webLauncher_ExternalLink;
+
+            webLauncher.CoreWebView2.Settings.IsSwipeNavigationEnabled = false;
+            webLauncher.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
+            webLauncher.CoreWebView2.Settings.IsGeneralAutofillEnabled = false;
+            webLauncher.CoreWebView2.Settings.IsPasswordAutosaveEnabled = false;
+            webLauncher.CoreWebView2.Settings.AreHostObjectsAllowed = true;
+            webLauncher.CoreWebView2.Settings.IsBuiltInErrorPageEnabled = false;
+            webLauncher.CoreWebView2.Settings.IsPinchZoomEnabled = false;
+            webLauncher.CoreWebView2.Settings.IsReputationCheckingRequired = false;
+            webLauncher.CoreWebView2.Settings.IsZoomControlEnabled = false;
+            webLauncher.CoreWebView2.Settings.IsStatusBarEnabled = false;
+
+            #if DEBUG
+                webLauncher.CoreWebView2.Settings.AreDevToolsEnabled = true;
+                webLauncher.CoreWebView2.Settings.AreDefaultContextMenusEnabled = true;
+            #else
+                webLauncher.CoreWebView2.Settings.AreDevToolsEnabled = false;
+                webLauncher.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
+            #endif  
+
+            webLauncher.CoreWebView2.AddHostObjectToScript("form", this);
+
+            webLauncher.CoreWebView2.Settings.UserAgent += $" CardboardLauncher/{typeof(Program).Assembly.GetName().Version}";
+
+            webLauncher.Source = new Uri(config.webUrl);
         }
 
-        private void webLauncher_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        private void webLauncher_Navigating(object sender, CoreWebView2NavigationStartingEventArgs e)
         {
-            webLauncher.Document.BackColor = this.BackColor;
-            this.webLauncher.ScrollBarsEnabled = false;
-            if(e.Url.ToString() == "about:blank") { return; }
+            //this.webLauncher.ScrollBarsEnabled = false;
+            if(e.Uri.ToString() == "about:blank") { return; }
 
-            string extForce = "#_force";
-            string safeSite = "https://harpnetstudios.com/";
-
-            Console.WriteLine(e.Url.ToString());
-            if(!e.Url.ToString().StartsWith(safeSite)&&e.Url.ToString()!="about:blank")
+            Console.WriteLine(e.Uri.ToString());
+            if(!e.Uri.ToString().StartsWith(trusted_url)&&e.Uri.ToString()!="about:blank")
             {
                 webWarn.BackColor = Color.Red;
+                technicalTitle.ForeColor = this.BackColor;
             }
             else 
             {
                 webWarn.BackColor = this.BackColor;
-
-                if (e.Url.ToString().EndsWith(extForce))
-                {
-                    //cancel the current event
-                    e.Cancel = true;
-
-                    //this opens the URL in the user's default browser
-                    Process.Start(e.Url.ToString().Remove(e.Url.ToString().Length - extForce.Length));
-                }
+                technicalTitle.ForeColor = Color.FromArgb(255,36,0);
             }
+        }
+
+        private void webLauncher_ExternalLink(object sender, CoreWebView2NewWindowRequestedEventArgs e)
+        {
+            e.Handled = true;
+            Process.Start(e.Uri.ToString());
         }
 
         private void gameTokenBtn_Click(object sender, EventArgs e)
@@ -523,9 +542,21 @@ namespace CardboardLauncher
             }
         }
 
-        private void webLauncher_Loaded(object sender, WebBrowserDocumentCompletedEventArgs e)
+        private void webLauncher_Loaded(object sender, CoreWebView2NavigationCompletedEventArgs e)
         {
-            if (!webLauncher.Visible && !technicalIssues) webLauncher.Visible = true;
+            if (e.IsSuccess)
+            {
+                //((WebView2)sender).ExecuteScriptAsync("document.querySelector('body').style.overflow='hidden'");
+            }
+        }
+
+        private void webLauncher_AddLauncherHeader(object sender, CoreWebView2WebResourceRequestedEventArgs e)
+        {
+            e.Request.Headers.SetHeader("X-Launcher-Version", typeof(Program).Assembly.GetName().Version.ToString());
+            if(!string.IsNullOrEmpty(config.gameToken))
+            {
+                e.Request.Headers.SetHeader("X-Game-Token", config.gameToken);
+            }
         }
     }
 }
