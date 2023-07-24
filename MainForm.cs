@@ -9,6 +9,7 @@ using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.WinForms;
 using Newtonsoft.Json;
 using Steamworks;
+using Steamworks.Data;
 
 namespace CardboardLauncher
 {
@@ -46,7 +47,7 @@ namespace CardboardLauncher
             {
                 SteamClient.Init(LauncherInfo.steamId, true);
                 if(!SteamClient.IsLoggedOn) return;
-                var ticket = SteamUser.GetAuthSessionTicket();
+                var ticket = SteamUser.GetAuthSessionTicket(NetIdentity.LocalHost);
 
                 //Clipboard.SetText(BitConverter.ToString(ticket.Data).Replace("-", ""));
 
@@ -66,7 +67,7 @@ namespace CardboardLauncher
                 }
 
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 DisplayMessage("Steam login failed!\n\nException: " + e.Message);
                 return;
@@ -176,6 +177,7 @@ namespace CardboardLauncher
                     text += string.Format("\nServer : {0}", ((HttpWebResponse)e.Response).Server);
                 }
                 DisplayMessage(text,"Account Server - Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                throw e;
             }
 
             return success;
@@ -423,13 +425,13 @@ namespace CardboardLauncher
             Console.WriteLine(e.Uri.ToString());
             if(!e.Uri.ToString().StartsWith(trusted_url)&&e.Uri.ToString()!="about:blank")
             {
-                webWarn.BackColor = Color.Red;
+                webWarn.BackColor = System.Drawing.Color.Red;
                 technicalTitle.ForeColor = this.BackColor;
             }
             else 
             {
                 webWarn.BackColor = this.BackColor;
-                technicalTitle.ForeColor = Color.FromArgb(255,36,0);
+                technicalTitle.ForeColor = System.Drawing.Color.FromArgb(255,36,0);
             }
         }
 
@@ -461,7 +463,7 @@ namespace CardboardLauncher
 
         private void saveConfigChkBox_CheckedChanged(object sender, EventArgs e)
         {
-            saveConfigChkBox.ForeColor = saveConfigChkBox.Checked ? Color.FromArgb(255, 36, 0) : SystemColors.HighlightText;
+            saveConfigChkBox.ForeColor = saveConfigChkBox.Checked ? System.Drawing.Color.FromArgb(255, 36, 0) : SystemColors.HighlightText;
         }
 
         private void pageSelectCombo_SelectedIndexChanged(object sender, EventArgs e)
