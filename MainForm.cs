@@ -5,11 +5,7 @@ using System.IO;
 using System.Net;
 using System.Security.Permissions;
 using System.Windows.Forms;
-using Microsoft.Web.WebView2.Core;
-using Microsoft.Web.WebView2.WinForms;
 using Newtonsoft.Json;
-using Steamworks;
-using Steamworks.Data;
 
 namespace CardboardLauncher
 {
@@ -29,7 +25,6 @@ namespace CardboardLauncher
 
         private Config config;
 
-        private string trusted_url = @"https://harpnetstudios.com";
         private string api_url = @"https://harpnetstudios.com/hnid/api/";
 
         private string migratePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Project Crimson Alpha");
@@ -38,40 +33,6 @@ namespace CardboardLauncher
         private DialogResult DisplayMessage(string text, string origin = null, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
         {
             return MessageBox.Show(text, LauncherInfo.gameName+" Launcher" + (origin != null ? " - "+origin : ""), buttons, icon);
-        }
-
-        private void ValidateSteam()
-        {
-            if(technicalIssues) return;
-            try
-            {
-                SteamClient.Init(LauncherInfo.steamId, true);
-                if(!SteamClient.IsLoggedOn) return;
-                var ticket = SteamUser.GetAuthSessionTicket(NetIdentity.LocalHost);
-
-                //Clipboard.SetText(BitConverter.ToString(ticket.Data).Replace("-", ""));
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(api_url+@"steam/AuthSession?ticket=" + BitConverter.ToString(ticket.Data).Replace("-", "") + "&id=" + LauncherInfo.gameId);
-                request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
-
-                SteamLoginInfo info = JsonConvert.DeserializeObject<SteamLoginInfo>(content);
-                Console.WriteLine(content);
-
-                if (!info.valid) return; // bogus steam info
-                else if (string.IsNullOrEmpty(info.gametoken)) return; // no token returned
-                else
-                {
-                    config.gameToken = info.gametoken;
-                }
-
-            }
-            catch (Exception e)
-            {
-                DisplayMessage("Steam login failed!\n\nException: " + e.Message);
-                return;
-            }
         }
 
         private void LoadConfig()
@@ -92,7 +53,7 @@ namespace CardboardLauncher
                     //serialize object directly into file stream
 
                     Config tmpConf = new Config();
-                    tmpConf.webUrl = "https://harpnetstudios.com/hnid/launcher/";
+                    tmpConf.webUrl = "https://harpnetstudios.com/hnid/launcher/"; // included for compatibility reasons
                     tmpConf.qConnectServ = "hnss.ga";
 
                     serializer.Serialize(file, tmpConf);
@@ -108,30 +69,6 @@ namespace CardboardLauncher
                 JsonSerializer serializer = new JsonSerializer();
                 //serialize object directly into file stream
                 serializer.Serialize(file, config);
-            }
-        }
-
-        private void CheckVersion()
-        {
-            try
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(config.webUrl + "version?id=" + LauncherInfo.gameId);
-                request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
-
-                var ver = typeof(Program).Assembly.GetName().Version;
-
-                if (new Version(content).CompareTo(ver) > 0) 
-                {
-                    DisplayMessage(string.Format("Looks like your launcher is out of date!\n\nNew version available: {0}\nYour version: {1}", content, ver.ToString()), "Launcher Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-            }
-            catch(WebException)
-            {
-                technicalIssues = technicalBody.Visible = technicalTitle.Visible = true;
-                //webLauncher.Visible = false;
-                playOfflineChkBox.Checked = true;
             }
         }
 
@@ -210,21 +147,8 @@ namespace CardboardLauncher
 
             InitializeComponent();
 
-            webWarn.Location = new Point(206, 34);
-            advSettings.Location = new Point(206, 34);
-
-            advSettings.Visible = false;
-
-            webLauncher.Location = new Point(3, 3);
-            webLauncher.BringToFront();
-
-
-            webLauncher.DefaultBackgroundColor = this.BackColor;
-
             LoadConfig();
-            CheckVersion();
 
-            if (args.Length > 1 && args[1] == "--steam") ValidateSteam();
             GrabInfo(config.gameToken);
             if(config.homeDir == "") config.homeDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "My Games", "Carmine Impact Alpha");
             if(config.homeDir == migratePath && Directory.Exists(migratePath)) PromptMigration();
@@ -235,11 +159,9 @@ namespace CardboardLauncher
             homeDirBox.Text = config.homeDir;
             qConnectServBox.Text = config.qConnectServ;
 
-            pageSelectCombo.SelectedIndex = 0; // HNID
-
             this.Text = launcherTitle.Text = LauncherInfo.gameName + " Launcher";
             playButton.Text = "&Play " + LauncherInfo.gameName;
-            versionLabel.Text = "Launcher Version " + typeof(Program).Assembly.GetName().Version;
+            versionLabel.Text = "Launcher Version " + typeof(Program).Assembly.GetName().Version + "_XP";
         }
 
         public void PromptMigration()
@@ -276,13 +198,8 @@ namespace CardboardLauncher
                 DisplayMessage(string.Format("Migration failed! Please report this in the Discord server.\n\nError details: {0}", e.Message), "Migration Wizard", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
          }
-
-        public void displayMessage(String message)
-        {
-            DisplayMessage(message, "Webpage");
-        }
         
-        public void setGameToken(string token, bool quiet=true)
+        private void setGameToken(string token, bool quiet=true)
         {
             if(GrabInfo(token))
             {
@@ -301,11 +218,6 @@ namespace CardboardLauncher
         public bool isTokenSet()
         {
             return config.gameToken != "";
-        }
-
-        public bool checkToken(string token)
-        {
-            return config.gameToken == token;
         }
 
         private void archGroup_Layout(object sender, LayoutEventArgs e)
@@ -380,65 +292,9 @@ namespace CardboardLauncher
             DisplayMessage("Created by Yellowberry.\n\nSpecial thanks to the rest of the HarpNet crew!");
         }
 
-        private async void mainForm_Load(object sender, EventArgs e)
+        private void mainForm_Load(object sender, EventArgs e)
         {
-            webLauncher.DefaultBackgroundColor = this.BackColor;
-
-            await webLauncher.EnsureCoreWebView2Async();
-
-            webLauncher.CoreWebView2.AddWebResourceRequestedFilter($"*", CoreWebView2WebResourceContext.All);
-            
-            webLauncher.CoreWebView2.WebResourceRequested += webLauncher_AddLauncherHeader;
-            webLauncher.CoreWebView2.NewWindowRequested += webLauncher_ExternalLink;
-
-            webLauncher.CoreWebView2.Settings.IsSwipeNavigationEnabled = false;
-            webLauncher.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
-            webLauncher.CoreWebView2.Settings.IsGeneralAutofillEnabled = false;
-            webLauncher.CoreWebView2.Settings.IsPasswordAutosaveEnabled = false;
-            webLauncher.CoreWebView2.Settings.AreHostObjectsAllowed = true;
-            webLauncher.CoreWebView2.Settings.IsBuiltInErrorPageEnabled = false;
-            webLauncher.CoreWebView2.Settings.IsPinchZoomEnabled = false;
-            webLauncher.CoreWebView2.Settings.IsReputationCheckingRequired = false;
-            webLauncher.CoreWebView2.Settings.IsZoomControlEnabled = false;
-            webLauncher.CoreWebView2.Settings.IsStatusBarEnabled = false;
-
-            #if DEBUG
-                webLauncher.CoreWebView2.Settings.AreDevToolsEnabled = true;
-                webLauncher.CoreWebView2.Settings.AreDefaultContextMenusEnabled = true;
-            #else
-                webLauncher.CoreWebView2.Settings.AreDevToolsEnabled = false;
-                webLauncher.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
-            #endif  
-
-            webLauncher.CoreWebView2.AddHostObjectToScript("form", this);
-
-            webLauncher.CoreWebView2.Settings.UserAgent += $" CardboardLauncher/{typeof(Program).Assembly.GetName().Version}";
-
-            webLauncher.Source = new Uri(config.webUrl);
-        }
-
-        private void webLauncher_Navigating(object sender, CoreWebView2NavigationStartingEventArgs e)
-        {
-            //this.webLauncher.ScrollBarsEnabled = false;
-            if(e.Uri.ToString() == "about:blank") { return; }
-
-            Console.WriteLine(e.Uri.ToString());
-            if(!e.Uri.ToString().StartsWith(trusted_url)&&e.Uri.ToString()!="about:blank")
-            {
-                webWarn.BackColor = System.Drawing.Color.Red;
-                technicalTitle.ForeColor = this.BackColor;
-            }
-            else 
-            {
-                webWarn.BackColor = this.BackColor;
-                technicalTitle.ForeColor = System.Drawing.Color.FromArgb(255,36,0);
-            }
-        }
-
-        private void webLauncher_ExternalLink(object sender, CoreWebView2NewWindowRequestedEventArgs e)
-        {
-            e.Handled = true;
-            Process.Start(e.Uri.ToString());
+            // nothing here for now
         }
 
         private void gameTokenBtn_Click(object sender, EventArgs e)
@@ -464,34 +320,6 @@ namespace CardboardLauncher
         private void saveConfigChkBox_CheckedChanged(object sender, EventArgs e)
         {
             saveConfigChkBox.ForeColor = saveConfigChkBox.Checked ? System.Drawing.Color.FromArgb(255, 36, 0) : SystemColors.HighlightText;
-        }
-
-        private void pageSelectCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int ps = pageSelectCombo.SelectedIndex;
-            if(ps == pageSelected) return; // Don't flash the screen trying to change the page, it looks bad. -Y
-
-            webWarn.Visible = false;
-            advSettings.Visible = false;
-
-            switch (ps)
-            {
-                case 0: // HNID
-                    webWarn.Visible = true;
-                    break;
-
-                case 1: // Advanced Settings
-                    advSettings.Visible = true;
-                    break;
-
-                case 2: // About
-                    break;
-
-                default: 
-                    break;
-            }
-
-            pageSelected = ps;
         }
 
         private void closeBtn_MouseClick(object sender, MouseEventArgs e)
@@ -541,23 +369,6 @@ namespace CardboardLauncher
             else if(!success)
             {
                 playButton.Enabled = false;
-            }
-        }
-
-        private void webLauncher_Loaded(object sender, CoreWebView2NavigationCompletedEventArgs e)
-        {
-            if (e.IsSuccess)
-            {
-                //((WebView2)sender).ExecuteScriptAsync("document.querySelector('body').style.overflow='hidden'");
-            }
-        }
-
-        private void webLauncher_AddLauncherHeader(object sender, CoreWebView2WebResourceRequestedEventArgs e)
-        {
-            e.Request.Headers.SetHeader("X-Launcher-Version", typeof(Program).Assembly.GetName().Version.ToString());
-            if(!string.IsNullOrEmpty(config.gameToken))
-            {
-                e.Request.Headers.SetHeader("X-Game-Token", config.gameToken);
             }
         }
     }

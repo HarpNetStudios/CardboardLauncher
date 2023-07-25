@@ -46,7 +46,7 @@
             this.gameTokenBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.gameTokenBtn.FlatAppearance.BorderSize = 0;
             this.gameTokenBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gameTokenBtn.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gameTokenBtn.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gameTokenBtn.Location = new System.Drawing.Point(200, 81);
             this.gameTokenBtn.Name = "gameTokenBtn";
             this.gameTokenBtn.Size = new System.Drawing.Size(80, 24);
@@ -66,7 +66,7 @@
             // gameTokenLabel
             // 
             this.gameTokenLabel.AutoSize = true;
-            this.gameTokenLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gameTokenLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gameTokenLabel.Location = new System.Drawing.Point(13, 39);
             this.gameTokenLabel.Name = "gameTokenLabel";
             this.gameTokenLabel.Size = new System.Drawing.Size(162, 13);
@@ -77,7 +77,7 @@
             // 
             this.launcherTitle.AutoEllipsis = true;
             this.launcherTitle.BackColor = System.Drawing.Color.Transparent;
-            this.launcherTitle.Font = new System.Drawing.Font("Segoe UI", 11.25F);
+            this.launcherTitle.Font = new System.Drawing.Font("Tahoma", 11.25F);
             this.launcherTitle.ForeColor = System.Drawing.Color.White;
             this.launcherTitle.Location = new System.Drawing.Point(0, 0);
             this.launcherTitle.Name = "launcherTitle";

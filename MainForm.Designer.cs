@@ -1,6 +1,4 @@
-﻿using Microsoft.Web.WebView2.Core;
-
-namespace CardboardLauncher
+﻿namespace CardboardLauncher
 {
     partial class mainForm
     {
@@ -31,19 +29,9 @@ namespace CardboardLauncher
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(mainForm));
-            this.archGroup = new System.Windows.Forms.GroupBox();
-            this.archRadio64 = new System.Windows.Forms.RadioButton();
-            this.archRadio32 = new System.Windows.Forms.RadioButton();
             this.playButton = new System.Windows.Forms.Button();
-            this.webLauncher = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.homeDirBrowser = new System.Windows.Forms.FolderBrowserDialog();
-            this.homeDirGroup = new System.Windows.Forms.GroupBox();
-            this.homeDirBtn = new System.Windows.Forms.Button();
-            this.homeDirBox = new System.Windows.Forms.TextBox();
             this.versionLabel = new System.Windows.Forms.Label();
-            this.webWarn = new System.Windows.Forms.Panel();
-            this.technicalBody = new System.Windows.Forms.Label();
-            this.technicalTitle = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.userAuthLabel = new System.Windows.Forms.Label();
             this.gameTokenBtn = new System.Windows.Forms.Button();
@@ -51,60 +39,26 @@ namespace CardboardLauncher
             this.qConnectChkBox = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.qConnectServBox = new System.Windows.Forms.TextBox();
-            this.pageSelectCombo = new System.Windows.Forms.ComboBox();
             this.title = new System.Windows.Forms.Panel();
             this.launcherTitle = new System.Windows.Forms.Label();
             this.closeBtn = new System.Windows.Forms.Panel();
-            this.advSettings = new System.Windows.Forms.Panel();
             this.playOfflineChkBox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.archGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.webLauncher)).BeginInit();
-            this.homeDirGroup.SuspendLayout();
-            this.webWarn.SuspendLayout();
+            this.advSettings = new System.Windows.Forms.Panel();
+            this.homeDirGroup = new System.Windows.Forms.GroupBox();
+            this.homeDirBox = new System.Windows.Forms.TextBox();
+            this.homeDirBtn = new System.Windows.Forms.Button();
+            this.archGroup = new System.Windows.Forms.GroupBox();
+            this.archRadio32 = new System.Windows.Forms.RadioButton();
+            this.archRadio64 = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.title.SuspendLayout();
-            this.advSettings.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.advSettings.SuspendLayout();
+            this.homeDirGroup.SuspendLayout();
+            this.archGroup.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // archGroup
-            // 
-            this.archGroup.Controls.Add(this.archRadio64);
-            this.archGroup.Controls.Add(this.archRadio32);
-            this.archGroup.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.archGroup.ForeColor = System.Drawing.SystemColors.Control;
-            this.archGroup.Location = new System.Drawing.Point(9, 3);
-            this.archGroup.Name = "archGroup";
-            this.archGroup.Size = new System.Drawing.Size(184, 42);
-            this.archGroup.TabIndex = 0;
-            this.archGroup.TabStop = false;
-            this.archGroup.Text = "Architecture";
-            this.archGroup.Layout += new System.Windows.Forms.LayoutEventHandler(this.archGroup_Layout);
-            // 
-            // archRadio64
-            // 
-            this.archRadio64.AutoSize = true;
-            this.archRadio64.Location = new System.Drawing.Point(90, 19);
-            this.archRadio64.Name = "archRadio64";
-            this.archRadio64.Size = new System.Drawing.Size(80, 17);
-            this.archRadio64.TabIndex = 1;
-            this.archRadio64.TabStop = true;
-            this.archRadio64.Text = "64-Bit (x64)";
-            this.archRadio64.UseVisualStyleBackColor = true;
-            this.archRadio64.CheckedChanged += new System.EventHandler(this.archRadio64_CheckedChanged);
-            // 
-            // archRadio32
-            // 
-            this.archRadio32.AutoSize = true;
-            this.archRadio32.Location = new System.Drawing.Point(6, 19);
-            this.archRadio32.Name = "archRadio32";
-            this.archRadio32.Size = new System.Drawing.Size(80, 17);
-            this.archRadio32.TabIndex = 0;
-            this.archRadio32.TabStop = true;
-            this.archRadio32.Text = "32-Bit (x86)";
-            this.archRadio32.UseVisualStyleBackColor = true;
             // 
             // playButton
             // 
@@ -113,7 +67,7 @@ namespace CardboardLauncher
             this.playButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.playButton.FlatAppearance.BorderSize = 0;
             this.playButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.playButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.playButton.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.playButton.ForeColor = System.Drawing.SystemColors.Control;
             this.playButton.Location = new System.Drawing.Point(-1, 26);
             this.playButton.Name = "playButton";
@@ -123,118 +77,29 @@ namespace CardboardLauncher
             this.playButton.UseVisualStyleBackColor = false;
             this.playButton.Click += new System.EventHandler(this.playButton_Click);
             // 
-            // webLauncher
-            // 
-            this.webLauncher.AllowExternalDrop = false;
-            this.webLauncher.CreationProperties = null;
-            this.webLauncher.DefaultBackgroundColor = this.BackColor;
-            this.webLauncher.Location = new System.Drawing.Point(533, 326);
-            this.webLauncher.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webLauncher.Name = "webLauncher";
-            this.webLauncher.Size = new System.Drawing.Size(590, 410);
-            this.webLauncher.TabIndex = 2;
-            this.webLauncher.ZoomFactor = 1D;
-            this.webLauncher.NavigationStarting += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs>(this.webLauncher_Navigating);
-            this.webLauncher.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.webLauncher_Loaded);
-            // 
             // homeDirBrowser
             // 
             this.homeDirBrowser.Description = "Select a directory for the game to save user files.";
             // 
-            // homeDirGroup
-            // 
-            this.homeDirGroup.Controls.Add(this.homeDirBtn);
-            this.homeDirGroup.Controls.Add(this.homeDirBox);
-            this.homeDirGroup.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.homeDirGroup.ForeColor = System.Drawing.SystemColors.Control;
-            this.homeDirGroup.Location = new System.Drawing.Point(9, 51);
-            this.homeDirGroup.Name = "homeDirGroup";
-            this.homeDirGroup.Size = new System.Drawing.Size(184, 45);
-            this.homeDirGroup.TabIndex = 2;
-            this.homeDirGroup.TabStop = false;
-            this.homeDirGroup.Text = "Home Directory";
-            // 
-            // homeDirBtn
-            // 
-            this.homeDirBtn.AutoEllipsis = true;
-            this.homeDirBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.homeDirBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
-            this.homeDirBtn.FlatAppearance.BorderSize = 0;
-            this.homeDirBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.homeDirBtn.Location = new System.Drawing.Point(158, 19);
-            this.homeDirBtn.Name = "homeDirBtn";
-            this.homeDirBtn.Size = new System.Drawing.Size(20, 20);
-            this.homeDirBtn.TabIndex = 1;
-            this.homeDirBtn.Text = "...";
-            this.homeDirBtn.UseVisualStyleBackColor = false;
-            this.homeDirBtn.Click += new System.EventHandler(this.homeDirBtn_Click);
-            // 
-            // homeDirBox
-            // 
-            this.homeDirBox.AllowDrop = true;
-            this.homeDirBox.Location = new System.Drawing.Point(6, 18);
-            this.homeDirBox.Name = "homeDirBox";
-            this.homeDirBox.Size = new System.Drawing.Size(146, 22);
-            this.homeDirBox.TabIndex = 0;
-            this.homeDirBox.TextChanged += new System.EventHandler(this.homeDirBox_TextChanged);
-            // 
             // versionLabel
             // 
             this.versionLabel.AutoSize = true;
-            this.versionLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.versionLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.versionLabel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
             this.versionLabel.Location = new System.Drawing.Point(12, 344);
             this.versionLabel.Name = "versionLabel";
-            this.versionLabel.Size = new System.Drawing.Size(131, 13);
+            this.versionLabel.Size = new System.Drawing.Size(148, 13);
             this.versionLabel.TabIndex = 3;
-            this.versionLabel.Text = "Launcher Version 0.0.0.0";
+            this.versionLabel.Text = "Launcher Version 0.0.0.0_XP";
             this.versionLabel.DoubleClick += new System.EventHandler(this.versionLabel_DoubleClick);
-            // 
-            // webWarn
-            // 
-            this.webWarn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(18)))), ((int)(((byte)(18)))), ((int)(((byte)(18)))));
-            this.webWarn.Controls.Add(this.technicalBody);
-            this.webWarn.Controls.Add(this.technicalTitle);
-            this.webWarn.Controls.Add(this.webLauncher);
-            this.webWarn.Location = new System.Drawing.Point(206, 34);
-            this.webWarn.Name = "webWarn";
-            this.webWarn.Size = new System.Drawing.Size(596, 416);
-            this.webWarn.TabIndex = 4;
-            // 
-            // technicalBody
-            // 
-            this.technicalBody.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.technicalBody.ForeColor = System.Drawing.SystemColors.Control;
-            this.technicalBody.Location = new System.Drawing.Point(8, 166);
-            this.technicalBody.Name = "technicalBody";
-            this.technicalBody.Size = new System.Drawing.Size(580, 84);
-            this.technicalBody.TabIndex = 4;
-            this.technicalBody.Text = "Looks like our servers are having some issues!\r\nDon\'t worry, you can still play i" +
-    "n offline mode until the issues are resolved!\r\n\r\nSorry about that, we\'ll get eve" +
-    "rything working as soon as we can!";
-            this.technicalBody.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.technicalBody.Visible = false;
-            // 
-            // technicalTitle
-            // 
-            this.technicalTitle.AutoSize = true;
-            this.technicalTitle.Font = new System.Drawing.Font("Segoe UI", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.technicalTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
-            this.technicalTitle.Location = new System.Drawing.Point(191, 40);
-            this.technicalTitle.Name = "technicalTitle";
-            this.technicalTitle.Size = new System.Drawing.Size(214, 86);
-            this.technicalTitle.TabIndex = 3;
-            this.technicalTitle.Text = "Oops!";
-            this.technicalTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.technicalTitle.Visible = false;
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.userAuthLabel);
             this.groupBox1.Controls.Add(this.gameTokenBtn);
-            this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBox1.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.groupBox1.ForeColor = System.Drawing.SystemColors.Control;
-            this.groupBox1.Location = new System.Drawing.Point(12, 64);
+            this.groupBox1.Location = new System.Drawing.Point(12, 34);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(184, 62);
             this.groupBox1.TabIndex = 3;
@@ -244,7 +109,7 @@ namespace CardboardLauncher
             // userAuthLabel
             // 
             this.userAuthLabel.AutoSize = true;
-            this.userAuthLabel.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.userAuthLabel.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.userAuthLabel.Location = new System.Drawing.Point(6, 16);
             this.userAuthLabel.Name = "userAuthLabel";
             this.userAuthLabel.Size = new System.Drawing.Size(81, 13);
@@ -258,7 +123,7 @@ namespace CardboardLauncher
             this.gameTokenBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
             this.gameTokenBtn.FlatAppearance.BorderSize = 0;
             this.gameTokenBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.gameTokenBtn.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.gameTokenBtn.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.gameTokenBtn.Location = new System.Drawing.Point(6, 32);
             this.gameTokenBtn.Name = "gameTokenBtn";
             this.gameTokenBtn.Size = new System.Drawing.Size(172, 24);
@@ -272,9 +137,9 @@ namespace CardboardLauncher
             this.saveConfigChkBox.AutoSize = true;
             this.saveConfigChkBox.Checked = true;
             this.saveConfigChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.saveConfigChkBox.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.saveConfigChkBox.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.saveConfigChkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
-            this.saveConfigChkBox.Location = new System.Drawing.Point(12, 183);
+            this.saveConfigChkBox.Location = new System.Drawing.Point(12, 153);
             this.saveConfigChkBox.Name = "saveConfigChkBox";
             this.saveConfigChkBox.Size = new System.Drawing.Size(87, 17);
             this.saveConfigChkBox.TabIndex = 5;
@@ -285,9 +150,9 @@ namespace CardboardLauncher
             // qConnectChkBox
             // 
             this.qConnectChkBox.AutoSize = true;
-            this.qConnectChkBox.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.qConnectChkBox.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.qConnectChkBox.ForeColor = System.Drawing.SystemColors.Control;
-            this.qConnectChkBox.Location = new System.Drawing.Point(97, 183);
+            this.qConnectChkBox.Location = new System.Drawing.Point(97, 153);
             this.qConnectChkBox.Name = "qConnectChkBox";
             this.qConnectChkBox.Size = new System.Drawing.Size(101, 17);
             this.qConnectChkBox.TabIndex = 6;
@@ -298,9 +163,9 @@ namespace CardboardLauncher
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.qConnectServBox);
-            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.groupBox2.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.groupBox2.ForeColor = System.Drawing.SystemColors.Control;
-            this.groupBox2.Location = new System.Drawing.Point(12, 132);
+            this.groupBox2.Location = new System.Drawing.Point(12, 102);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(184, 45);
             this.groupBox2.TabIndex = 3;
@@ -316,21 +181,6 @@ namespace CardboardLauncher
             this.qConnectServBox.Size = new System.Drawing.Size(172, 22);
             this.qConnectServBox.TabIndex = 0;
             this.qConnectServBox.TextChanged += new System.EventHandler(this.qConnectServBox_TextChanged);
-            // 
-            // pageSelectCombo
-            // 
-            this.pageSelectCombo.BackColor = System.Drawing.SystemColors.Window;
-            this.pageSelectCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.pageSelectCombo.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.pageSelectCombo.FormattingEnabled = true;
-            this.pageSelectCombo.Items.AddRange(new object[] {
-            "HNID",
-            "Advanced Settings"});
-            this.pageSelectCombo.Location = new System.Drawing.Point(12, 37);
-            this.pageSelectCombo.Name = "pageSelectCombo";
-            this.pageSelectCombo.Size = new System.Drawing.Size(184, 21);
-            this.pageSelectCombo.TabIndex = 7;
-            this.pageSelectCombo.SelectedIndexChanged += new System.EventHandler(this.pageSelectCombo_SelectedIndexChanged);
             // 
             // title
             // 
@@ -349,7 +199,7 @@ namespace CardboardLauncher
             // 
             this.launcherTitle.AutoEllipsis = true;
             this.launcherTitle.BackColor = System.Drawing.Color.Transparent;
-            this.launcherTitle.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.launcherTitle.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.launcherTitle.ForeColor = System.Drawing.Color.White;
             this.launcherTitle.Location = new System.Drawing.Point(0, 0);
             this.launcherTitle.Name = "launcherTitle";
@@ -375,19 +225,10 @@ namespace CardboardLauncher
             this.closeBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.closeBtn_MouseDown);
             this.closeBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.closeBtn_MouseUp);
             // 
-            // advSettings
-            // 
-            this.advSettings.Controls.Add(this.archGroup);
-            this.advSettings.Controls.Add(this.homeDirGroup);
-            this.advSettings.Location = new System.Drawing.Point(243, 431);
-            this.advSettings.Name = "advSettings";
-            this.advSettings.Size = new System.Drawing.Size(596, 416);
-            this.advSettings.TabIndex = 9;
-            // 
             // playOfflineChkBox
             // 
             this.playOfflineChkBox.AutoSize = true;
-            this.playOfflineChkBox.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
+            this.playOfflineChkBox.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
             this.playOfflineChkBox.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(36)))), ((int)(((byte)(0)))));
             this.playOfflineChkBox.Location = new System.Drawing.Point(5, 5);
             this.playOfflineChkBox.Name = "playOfflineChkBox";
@@ -407,6 +248,89 @@ namespace CardboardLauncher
             this.panel1.Size = new System.Drawing.Size(184, 78);
             this.panel1.TabIndex = 11;
             // 
+            // advSettings
+            // 
+            this.advSettings.Controls.Add(this.archGroup);
+            this.advSettings.Controls.Add(this.homeDirGroup);
+            this.advSettings.Location = new System.Drawing.Point(206, 34);
+            this.advSettings.Name = "advSettings";
+            this.advSettings.Size = new System.Drawing.Size(596, 416);
+            this.advSettings.TabIndex = 9;
+            // 
+            // homeDirGroup
+            // 
+            this.homeDirGroup.Controls.Add(this.homeDirBtn);
+            this.homeDirGroup.Controls.Add(this.homeDirBox);
+            this.homeDirGroup.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.homeDirGroup.ForeColor = System.Drawing.SystemColors.Control;
+            this.homeDirGroup.Location = new System.Drawing.Point(9, 51);
+            this.homeDirGroup.Name = "homeDirGroup";
+            this.homeDirGroup.Size = new System.Drawing.Size(184, 45);
+            this.homeDirGroup.TabIndex = 2;
+            this.homeDirGroup.TabStop = false;
+            this.homeDirGroup.Text = "Home Directory";
+            // 
+            // homeDirBox
+            // 
+            this.homeDirBox.AllowDrop = true;
+            this.homeDirBox.Location = new System.Drawing.Point(6, 18);
+            this.homeDirBox.Name = "homeDirBox";
+            this.homeDirBox.Size = new System.Drawing.Size(146, 22);
+            this.homeDirBox.TabIndex = 0;
+            this.homeDirBox.TextChanged += new System.EventHandler(this.homeDirBox_TextChanged);
+            // 
+            // homeDirBtn
+            // 
+            this.homeDirBtn.AutoEllipsis = true;
+            this.homeDirBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.homeDirBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
+            this.homeDirBtn.FlatAppearance.BorderSize = 0;
+            this.homeDirBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.homeDirBtn.Location = new System.Drawing.Point(158, 19);
+            this.homeDirBtn.Name = "homeDirBtn";
+            this.homeDirBtn.Size = new System.Drawing.Size(20, 20);
+            this.homeDirBtn.TabIndex = 1;
+            this.homeDirBtn.Text = "...";
+            this.homeDirBtn.UseVisualStyleBackColor = false;
+            this.homeDirBtn.Click += new System.EventHandler(this.homeDirBtn_Click);
+            // 
+            // archGroup
+            // 
+            this.archGroup.Controls.Add(this.archRadio64);
+            this.archGroup.Controls.Add(this.archRadio32);
+            this.archGroup.Font = new System.Drawing.Font("Tahoma", 8.25F);
+            this.archGroup.ForeColor = System.Drawing.SystemColors.Control;
+            this.archGroup.Location = new System.Drawing.Point(9, 3);
+            this.archGroup.Name = "archGroup";
+            this.archGroup.Size = new System.Drawing.Size(184, 42);
+            this.archGroup.TabIndex = 0;
+            this.archGroup.TabStop = false;
+            this.archGroup.Text = "Architecture";
+            this.archGroup.Layout += new System.Windows.Forms.LayoutEventHandler(this.archGroup_Layout);
+            // 
+            // archRadio32
+            // 
+            this.archRadio32.AutoSize = true;
+            this.archRadio32.Location = new System.Drawing.Point(6, 19);
+            this.archRadio32.Name = "archRadio32";
+            this.archRadio32.Size = new System.Drawing.Size(80, 17);
+            this.archRadio32.TabIndex = 0;
+            this.archRadio32.TabStop = true;
+            this.archRadio32.Text = "32-Bit (x86)";
+            this.archRadio32.UseVisualStyleBackColor = true;
+            // 
+            // archRadio64
+            // 
+            this.archRadio64.AutoSize = true;
+            this.archRadio64.Location = new System.Drawing.Point(90, 19);
+            this.archRadio64.Name = "archRadio64";
+            this.archRadio64.Size = new System.Drawing.Size(80, 17);
+            this.archRadio64.TabIndex = 1;
+            this.archRadio64.TabStop = true;
+            this.archRadio64.Text = "64-Bit (x64)";
+            this.archRadio64.UseVisualStyleBackColor = true;
+            this.archRadio64.CheckedChanged += new System.EventHandler(this.archRadio64_CheckedChanged);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -416,12 +340,10 @@ namespace CardboardLauncher
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.advSettings);
             this.Controls.Add(this.title);
-            this.Controls.Add(this.pageSelectCombo);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.qConnectChkBox);
             this.Controls.Add(this.saveConfigChkBox);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.webWarn);
             this.Controls.Add(this.versionLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -431,39 +353,27 @@ namespace CardboardLauncher
             this.Tag = "";
             this.Text = "{GAMETITLE} Launcher";
             this.Load += new System.EventHandler(this.mainForm_Load);
-            this.archGroup.ResumeLayout(false);
-            this.archGroup.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.webLauncher)).EndInit();
-            this.homeDirGroup.ResumeLayout(false);
-            this.homeDirGroup.PerformLayout();
-            this.webWarn.ResumeLayout(false);
-            this.webWarn.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.title.ResumeLayout(false);
-            this.advSettings.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.advSettings.ResumeLayout(false);
+            this.homeDirGroup.ResumeLayout(false);
+            this.homeDirGroup.PerformLayout();
+            this.archGroup.ResumeLayout(false);
+            this.archGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.GroupBox archGroup;
-        private System.Windows.Forms.RadioButton archRadio32;
-        private System.Windows.Forms.RadioButton archRadio64;
         private System.Windows.Forms.Button playButton;
-        private Microsoft.Web.WebView2.WinForms.WebView2 webLauncher;
         private System.Windows.Forms.FolderBrowserDialog homeDirBrowser;
-        private System.Windows.Forms.GroupBox homeDirGroup;
-        private System.Windows.Forms.TextBox homeDirBox;
-        private System.Windows.Forms.Button homeDirBtn;
         private System.Windows.Forms.Label versionLabel;
-        private System.Windows.Forms.Panel webWarn;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label userAuthLabel;
         private System.Windows.Forms.Button gameTokenBtn;
@@ -475,11 +385,15 @@ namespace CardboardLauncher
         private System.Windows.Forms.Panel title;
         private System.Windows.Forms.Panel closeBtn;
         private System.Windows.Forms.Label launcherTitle;
-        private System.Windows.Forms.Panel advSettings;
         private System.Windows.Forms.CheckBox playOfflineChkBox;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label technicalBody;
-        private System.Windows.Forms.Label technicalTitle;
+        private System.Windows.Forms.Panel advSettings;
+        private System.Windows.Forms.GroupBox archGroup;
+        private System.Windows.Forms.RadioButton archRadio64;
+        private System.Windows.Forms.RadioButton archRadio32;
+        private System.Windows.Forms.GroupBox homeDirGroup;
+        private System.Windows.Forms.Button homeDirBtn;
+        private System.Windows.Forms.TextBox homeDirBox;
     }
 }
 
