@@ -25,7 +25,7 @@ namespace CardboardLauncher
         private bool success;
         private int pageSelected;
 
-        private bool use64bit;
+        private bool use32bit;
 
         private Config config;
 
@@ -37,7 +37,7 @@ namespace CardboardLauncher
 
         private DialogResult DisplayMessage(string text, string origin = null, MessageBoxButtons buttons = MessageBoxButtons.OK, MessageBoxIcon icon = MessageBoxIcon.None)
         {
-            return MessageBox.Show(text, LauncherInfo.gameName+" Launcher" + (origin != null ? " - "+origin : ""), buttons, icon);
+            return MessageBox.Show(text, $"{LauncherInfo.gameName} Launcher{(origin != null ? $" - {origin}" : "")}", buttons, icon);
         }
 
         private void ValidateSteam()
@@ -49,9 +49,7 @@ namespace CardboardLauncher
                 if(!SteamClient.IsLoggedOn) return;
                 var ticket = SteamUser.GetAuthSessionTicket(NetIdentity.LocalHost);
 
-                //Clipboard.SetText(BitConverter.ToString(ticket.Data).Replace("-", ""));
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(api_url+@"steam/AuthSession?ticket=" + BitConverter.ToString(ticket.Data).Replace("-", "") + "&id=" + LauncherInfo.gameId);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"{api_url}steam/AuthSession?ticket={BitConverter.ToString(ticket.Data).Replace("-", "")}&id={LauncherInfo.gameId}");
                 request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
@@ -69,7 +67,7 @@ namespace CardboardLauncher
             }
             catch (Exception e)
             {
-                DisplayMessage("Steam login failed!\n\nException: " + e.Message);
+                DisplayMessage($"Steam login failed!\n\nException: {e.Message}");
                 return;
             }
         }
@@ -115,7 +113,7 @@ namespace CardboardLauncher
         {
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(config.webUrl + "version?id=" + LauncherInfo.gameId);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"{config.webUrl}version?id={LauncherInfo.gameId}");
                 request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
@@ -124,7 +122,7 @@ namespace CardboardLauncher
 
                 if (new Version(content).CompareTo(ver) > 0) 
                 {
-                    DisplayMessage(string.Format("Looks like your launcher is out of date!\n\nNew version available: {0}\nYour version: {1}", content, ver.ToString()), "Launcher Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DisplayMessage($"Looks like your launcher is out of date!\n\nNew version available: {content}\nYour version: {ver.ToString()}", "Launcher Update", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch(WebException)
@@ -140,10 +138,10 @@ namespace CardboardLauncher
             if (token=="" || technicalIssues) return false;
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(api_url+@"v1/game/login?game=" + LauncherInfo.gameId);
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create($"{api_url}v1/game/login?game={LauncherInfo.gameId}");
                 request.Timeout = 15000; // hopefully will make the launcher more responsive when the servers are down
                 WebHeaderCollection whc = request.Headers;
-                whc.Add("X-Game-Token: "+token);
+                whc.Add($"X-Game-Token: {token}");
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 string content = new StreamReader(response.GetResponseStream()).ReadToEnd();
                 UserInfo info = JsonConvert.DeserializeObject<UserInfo>(content);
@@ -156,7 +154,7 @@ namespace CardboardLauncher
                 if(success)
                 {
                     config.gameToken = token;
-                    userAuthLabel.Text = "User: " + info.username;
+                    userAuthLabel.Text = $"User: {info.username}";
                 }
                 else
                 {
@@ -168,16 +166,16 @@ namespace CardboardLauncher
             }
             catch(WebException e)
             {
-                string text = "Exception! "+e.Message;
+                string text = $"Exception! {e.Message}";
                 if(e.Status == WebExceptionStatus.ProtocolError)
                 {
-                    text = "Web Exception! " + e.Message+"\n";
-                    text += string.Format("\nStatus Code : {0}", ((int)((HttpWebResponse)e.Response).StatusCode));
-                    text += string.Format("\nStatus Description : {0}", ((HttpWebResponse)e.Response).StatusDescription);
-                    text += string.Format("\nServer : {0}", ((HttpWebResponse)e.Response).Server);
+                    text = $"Web Exception! {e.Message}\n";
+                    text += $"\nStatus Code : {(int)((HttpWebResponse)e.Response).StatusCode}";
+                    text += $"\nStatus Description : {((HttpWebResponse)e.Response).StatusDescription}";
+                    text += $"\nServer : {((HttpWebResponse)e.Response).Server}";
                 }
                 DisplayMessage(text,"Account Server - Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                throw e;
+                //throw e; // why are we throwing the exception after catching it???
             }
 
             return success;
@@ -237,9 +235,9 @@ namespace CardboardLauncher
 
             pageSelectCombo.SelectedIndex = 0; // HNID
 
-            this.Text = launcherTitle.Text = LauncherInfo.gameName + " Launcher";
-            playButton.Text = "&Play " + LauncherInfo.gameName;
-            versionLabel.Text = "Launcher Version " + typeof(Program).Assembly.GetName().Version;
+            this.Text = launcherTitle.Text = $"{LauncherInfo.gameName} Launcher";
+            playButton.Text = $"&Play {LauncherInfo.gameName}";
+            versionLabel.Text = $"Launcher Version {typeof(Program).Assembly.GetName().Version}";
         }
 
         public void PromptMigration()
@@ -256,7 +254,7 @@ namespace CardboardLauncher
             }
             catch (Exception e)
             {
-                DisplayMessage(string.Format("Migration failed! Please report this in the Discord server.\n\nError details: {0}", e.Message), "Migration Wizard", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayMessage($"Migration failed! Please report this in the Discord server.\n\nError details: {e.Message}", "Migration Wizard", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -330,9 +328,9 @@ namespace CardboardLauncher
             }
         }
 
-        private void archRadio64_CheckedChanged(object sender, EventArgs e)
+        private void archRadio32_CheckedChanged(object sender, EventArgs e)
         {
-            use64bit = archRadio64.Checked;
+            use32bit = archRadio32.Checked;
         }
 
         private void playButton_Click(object sender, EventArgs e)
@@ -354,10 +352,13 @@ namespace CardboardLauncher
             
             // Create new process definition
             ProcessStartInfo gameProcess = new ProcessStartInfo();
-            gameProcess.FileName = Path.Combine("bin" + (use64bit ? "64" : ""), "cardboard_msvc.exe");
-            gameProcess.Arguments = "-c" + launchToken + " -q\"" + config.homeDir + "\" -glog.txt" + (qConnectChkBox.Checked&&!playOfflineChkBox.Checked ? " -x\"connect "+config.qConnectServ+"\"" : "");
-             
-            
+            gameProcess.FileName = Path.Combine("bin" + (use32bit ? "32" : ""), "cardboard.exe");
+            gameProcess.Arguments = $"-c{launchToken} -q\"{config.homeDir}\" -glog.txt";
+            if (qConnectChkBox.Checked && !playOfflineChkBox.Checked)
+            {
+                gameProcess.Arguments += $" -x\"connect {config.qConnectServ}\"";
+            }
+
             // Attempt to start process with correct arguments
             try
             {

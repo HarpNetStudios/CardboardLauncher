@@ -93,7 +93,6 @@ namespace CardboardLauncher
             this.archRadio64.TabStop = true;
             this.archRadio64.Text = "64-Bit (x64)";
             this.archRadio64.UseVisualStyleBackColor = true;
-            this.archRadio64.CheckedChanged += new System.EventHandler(this.archRadio64_CheckedChanged);
             // 
             // archRadio32
             // 
@@ -105,7 +104,8 @@ namespace CardboardLauncher
             this.archRadio32.TabStop = true;
             this.archRadio32.Text = "32-Bit (x86)";
             this.archRadio32.UseVisualStyleBackColor = true;
-            // 
+            this.archRadio32.CheckedChanged += new System.EventHandler(this.archRadio32_CheckedChanged);
+            //
             // playButton
             // 
             this.playButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
